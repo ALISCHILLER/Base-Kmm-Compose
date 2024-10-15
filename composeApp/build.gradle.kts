@@ -7,6 +7,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+
+    alias(dependency.plugins.ksp)
+    alias(dependency.plugins.room)
 }
 
 kotlin {
@@ -38,9 +41,12 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             //ktor network
             implementation(dependency.ktor.client.okhttp)
-
             //coroutines
             implementation(dependency.kotlinx.coroutines.android)
+
+            // Koin
+            implementation(dependency.koin.android)
+            implementation(dependency.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -54,11 +60,24 @@ kotlin {
 
             //ktor network
             implementation(dependency.ktor.client.core)
+            implementation(dependency.ktor.contentNegotiation)
+            implementation(dependency.ktor.serialization)
+            implementation(dependency.kotlinx.serialization.json)
 
             //coroutines
             implementation(dependency.kotlinx.coroutines.core)
             implementation(dependency.ktor.contentNegotiation)
             implementation(dependency.ktor.serialization)
+
+            // Koin
+            api(dependency.koin.core)
+            implementation(dependency.koin.compose)
+            implementation(dependency.koin.composeVM)
+
+            // Room + Sqlite
+            implementation(dependency.androidx.room.runtime)
+            implementation(dependency.sqlite.bundled)
+
 
         }
         desktopMain.dependencies {
@@ -107,6 +126,27 @@ android {
     }
     dependencies {
         debugImplementation(compose.uiTooling)
+    }
+}
+
+room{
+    schemaDirectory("$projectDir/schemas")
+}
+dependencies {
+    //    ksp(libs.androidx.room.compiler)
+
+//    add("kspAndroid", libs.androidx.room.compiler)
+//    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+//    add("kspIosX64", libs.androidx.room.compiler)
+//    add("kspIosArm64", libs.androidx.room.compiler)
+//
+    // Room
+    add("kspCommonMainMetadata", dependency.androidx.room.compiler)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata" ) {
+        dependsOn("kspCommonMainKotlinMetadata")
     }
 }
 
