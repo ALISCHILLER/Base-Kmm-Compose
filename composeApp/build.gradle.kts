@@ -63,7 +63,7 @@ kotlin {
             implementation(dependency.ktor.contentNegotiation)
             implementation(dependency.ktor.serialization)
             implementation(dependency.kotlinx.serialization.json)
-
+            implementation(dependency.ktor.logging)
             //coroutines
             implementation(dependency.kotlinx.coroutines.core)
             implementation(dependency.ktor.contentNegotiation)
@@ -78,6 +78,11 @@ kotlin {
             implementation(dependency.androidx.room.runtime)
             implementation(dependency.sqlite.bundled)
 
+            //Kermit  for logging
+            implementation(dependency.kermit)
+
+            //dataStore
+            implementation(dependency.androidx.data.store.core)
 
         }
         desktopMain.dependencies {
